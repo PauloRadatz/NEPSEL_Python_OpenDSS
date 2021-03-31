@@ -86,6 +86,7 @@ def hc_process(kva_to_kw, pf, circuit_pu, load_mult, percent, location):
     print(f"Overvoltage violation {ov_violation}\nThermal violation {thermal_violation}")
     penetration_level = (i - 1) * len(selected_buses) * p_step
     functions.increment_pv_size(dss, p_step, kva_to_kw, pf, i - 1)
+    dss.solution_solve()
     total_p_feederhead, total_q_feederhead, voltage_min, voltage_max = functions.get_powerflow_results(dss)
     total_pv_p, total_pv_q = functions.get_total_pv_powers(dss)
 
