@@ -42,16 +42,16 @@ def hc_process(kva_to_kw, pf, circuit_pu, load_mult, percent, location):
     total_p_feederhead, total_q_feederhead, voltage_min, voltage_max = functions.get_powerflow_results(dss)
     # Ex 2
     # a) Find all MV three-phase buses
-    buses = dss.circuit_allbusnames()
+    buses = dss.circuit_all_bus_names()
     mv_buses = list()
     mv_bus_voltage_dict = dict()
     for bus in buses:
-        dss.circuit_setactivebus(bus)
+        dss.circuit_set_active_bus(bus)
         if bus == "sourcebus":
             pass
-        elif dss.bus_kVbase() >= 1.0 and len(dss.bus_nodes()) == 3:
+        elif dss.bus_kv_base() >= 1.0 and len(dss.bus_nodes()) == 3:
             mv_buses.append(bus)
-            mv_bus_voltage_dict[bus] = dss.bus_kVbase()
+            mv_bus_voltage_dict[bus] = dss.bus_kv_base()
     # b) Select 20% of the MV three-phase buses
     selected_buses = random.sample(mv_buses, int(percent * len(mv_buses)))
     # c) Add PV systems
@@ -75,9 +75,9 @@ def hc_process(kva_to_kw, pf, circuit_pu, load_mult, percent, location):
         dss.lines_first()
         for _ in range(dss.lines_count()):
             if dss.lines_read_phases() == 3:
-                dss.circuit_setactiveelement(dss.lines_read_name())
-                current = dss.cktelement_currentsmagang()
-                rating_current = dss.cktelement_read_normamps()
+                dss.circuit_set_active_element(dss.lines_read_name())
+                current = dss.cktelement_currents_mag_ang()
+                rating_current = dss.cktelement_read_norm_amps()
 
                 if max(current[0:12:2]) / rating_current > 1:
                     thermal_violation = True

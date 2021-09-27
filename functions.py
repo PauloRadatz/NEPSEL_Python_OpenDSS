@@ -34,9 +34,9 @@ def define_opendss_object(dss, opendss_class, name, **kwargs):
 
 
 def get_powerflow_results(dss):
-    total_p_feederhead = -1 * dss.circuit_totalpower()[0]
-    total_q_feederhead = -1 * dss.circuit_totalpower()[1]
-    voltages = dss.circuit_allbusvmagpu()
+    total_p_feederhead = -1 * dss.circuit_total_power()[0]
+    total_q_feederhead = -1 * dss.circuit_total_power()[1]
+    voltages = dss.circuit_all_bus_vmag_pu()
     voltage_min = min(voltages)
     voltage_max = max(voltages)
 
@@ -55,7 +55,7 @@ def get_total_pv_powers(dss):
     total_pv_q_list = list()
     dss.pvsystems_first()
     for _ in range(dss.pvsystems_count()):
-        dss.circuit_setactiveelement(f"PVsystem.{dss.pvsystems_read_name()}")
+        dss.circuit_set_active_element(f"PVsystem.{dss.pvsystems_read_name()}")
         total_pv_p_list.append(-1 * sum(dss.cktelement_powers()[0:6:2]))
         total_pv_q_list.append(-1 * sum(dss.cktelement_powers()[1:6:2]))
         dss.pvsystems_next()
